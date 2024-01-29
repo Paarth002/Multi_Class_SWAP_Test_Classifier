@@ -185,12 +185,35 @@ def leave_one_out_cross_validation(X, y, label_vectors, classification_func, ker
 
 label_vectors = {0:np.array([0., 0., 1.]), 1:np.array([ 0.4714045, -0.8164966, -0.3333333]), 2:np.array([ 0.4714045,  0.8164966, -0.3333333]), 3:np.array([-0.942809 ,  0.       , -0.3333333])}
 
-data = read_csv("small_3d_xor.csv")
+# data = read_csv("small_3d_xor.csv")
 
-X = np.array(list(zip(data['X'],data['Y'],data['Z'])))
-y = np.array(data['Class'])
+# X = np.array(list(zip(data['X'],data['Y'],data['Z'])))
+# y = np.array(data['Class'])
 
-leave_one_out_cross_validation(X, y, label_vectors, analytical_classification, kernel_func=linear_kernel, encoding="amplitude", P=0.09)
+X_train, X_test, y_train, y_test = np.load('/kaggle/input/qnmf-multiclass/train_embeddings_binary_8.npy'), \
+                                   np.load('/kaggle/input/qnmf-multiclass/test_embeddings_binary_8.npy'), \
+                                   np.load('/kaggle/input/qnmf-multiclass/np_multiclass_labels_train.npy'), \
+                                   np.load('/kaggle/input/qnmf-multiclass/np_multiclass_labels_test.npy'), \
+
+print("ANALYTICAL CLASSIFICATION")
+test_accuracy(X_train, test_input, y_train, y_test, label_vectors, analytical_classification, kernel_func=linear_kernel)
+print("-"*20)
+
+print("ANALYTICAL CLASSIFICATION WITH NOISE")
+test_accuracy(X_train, test_input, y_train, y_test, label_vectors, analytical_classification, kernel_func=linear_kernel, P=0.1)
+print("-"*20)
+
+print("STATEVECTOR CLASSIFICATION")
+test_accuracy(X_train, test_input, y_train, y_test, label_vectors, statevector_classification, encoding="amplitude")
+print("-"*20)
+
+print("STATEVECTOR CLASSIFICATION WITH NOISE")
+test_accuracy(X_train, test_input, y_train, y_test, label_vectors, statevector_classification, encoding="amplitude", P=0.1)
+print("-"*20)
+
+# label_vectors = {0:class_0, 1:class_1, 2: class_2, 3:class_3}
+# leave_one_out_cross_validation(X, y, label_vectors, analytical_classification, kernel_func=linear_kernel, encoding="amplitude", P=0.09)
+# leave_one_out_cross_validation(X, y, label_vectors, analytical_classification, kernel_func=linear_kernel, encoding="amplitude", P=0.09)
 
 """"
 kf = KFold(n_splits=5, shuffle=True, random_state=0)
