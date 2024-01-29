@@ -195,6 +195,7 @@ X_train, X_test, y_train, y_test = np.load('/kaggle/input/qnmf-multiclass/train_
                                    np.load('/kaggle/input/qnmf-multiclass/np_multiclass_labels_train.npy'), \
                                    np.load('/kaggle/input/qnmf-multiclass/np_multiclass_labels_test.npy'), \
 
+test_input = X_test
 print("ANALYTICAL CLASSIFICATION")
 test_accuracy(X_train, test_input, y_train, y_test, label_vectors, analytical_classification, kernel_func=linear_kernel)
 print("-"*20)
